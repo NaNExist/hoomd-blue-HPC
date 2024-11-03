@@ -228,3 +228,5 @@ if (NOT WIN32)
     SYMBOLIC
   )
 endif()
+
+add_compile_options("-xhost -DMKL_ILP64 -qmkl-ilp64=parallel -fiopenmp -Wnan-infinity-disabled -Woverriding- option")
