@@ -1,7 +1,7 @@
-
-
 Building from source
 ====================
+
+The following steps are designed to build HOOMD-blue from source on **Gadi**.
 
 To build the **HOOMD-blue** from source:
 
@@ -55,7 +55,7 @@ cmake \
 -B ${HOME}/scratch/workdir/hoomd/build/hoomd-intelmpi \
 -S ${HOME}/scratch/workdir/hoomd/hoomd-blue-HPC \
 -D ENABLE_MPI=on \
--D ENABLE_TBB=off \
+-D ENABLE_TBB=on \
 -D ENABLE_LLVM=off \
 -DCMAKE_CXX_FLAGS=-march=native -DCMAKE_C_FLAGS=-march=native \
 -D cereal_DIR=${HOME}/scratch/workdir/hoomd/hoomd.py312/lib64/cmake/cereal \
@@ -161,7 +161,7 @@ fi
 ncpus=$((48 * nodes))  
 mem=$((nodes * 48 * 1))
   
-job_name="hoomd_icx_mkl.nodes${nodes}.WS${warmup_steps}.BS${benchmark_steps}"  
+job_name="hoomd.nodes${nodes}.WS${warmup_steps}.BS${benchmark_steps}"  
   
 export NODES=$nodes  
 export WARMUP_STEPS=$warmup_steps  
@@ -171,7 +171,7 @@ export REPEATS=$repeats
 commands="qsub -V   
     -l walltime=${walltime},ncpus=$ncpus,mem=${mem}gb 
     -N ${job_name}   
-    ./hoomd_icx_mkl.sh"
+    ./hoomd.sh"
 
 echo "repeats = $repeats"
 echo $commands
