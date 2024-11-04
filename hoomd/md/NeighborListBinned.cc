@@ -92,7 +92,7 @@ void NeighborListBinned::buildNlist(uint64_t timestep)
     // for each local particle
     unsigned int nparticles = m_pdata->getN();
 
-    for (int i = 0; i < (int)nparticles; i++)
+    for (unsigned int i = 0; i < nparticles; i++)
         {
         unsigned int cur_n_neigh = 0;
 
@@ -141,11 +141,13 @@ void NeighborListBinned::buildNlist(uint64_t timestep)
                 // (1) they are the same particle, or
                 // (2) the r_cut(i,j) indicates to skip, or
                 // (3) they are in the same body
-                bool excluded = ((i == (int)cur_neigh) || (r_cut <= Scalar(0.0)));
-                if (m_filter_body && body_i != NO_BODY)
-                    excluded = excluded | (body_i == h_body.data[cur_neigh]);
+                bool excluded = ((i == cur_neigh) || (r_cut <= Scalar(0.0)));
                 if (excluded)
                     continue;
+                if (m_filter_body && body_i != NO_BODY)
+                    if(body_i == h_body.data[cur_neigh])
+                        continue;
+                
 
                 Scalar3 neigh_pos = make_scalar3(cur_xyzf.x, cur_xyzf.y, cur_xyzf.z);
                 Scalar3 dx = my_pos - neigh_pos;
@@ -157,7 +159,7 @@ void NeighborListBinned::buildNlist(uint64_t timestep)
                 if (dr_sq <= r_listsq && !excluded)
                     {
                     // Add the neighbor index to the list.
-                    if (m_storage_mode == full || i < (int)cur_neigh)
+                    if (m_storage_mode == full || i < cur_neigh)
                         {
                         // local neighbor
                         if (cur_n_neigh < Nmax_i)
