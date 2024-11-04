@@ -34,8 +34,8 @@ time ${HOME}/scratch/workdir/hoomd/hoomd.py312/bin/pip install numpy gsd
 
 The following commands
 
-1. Check available MPI libraries that pre-built by the Supercomputer administrator
-2. Load OpenMPI environment variables
+1. Check available MPI libraries, IntelMKL libraries and IntelTBB libraries that pre-built by the Supercomputer administrator
+2. Load IntelMPI environment variables
 3. Configure the scripts for building HOOMD-blue with OpenMPI and pip-installed `pybind11`
 4. Build the Python package
 5. Validate the built Python package
@@ -52,8 +52,8 @@ export MKLROOT=/apps/intel-tools/intel-mkl/2024.2.1
 
 time PATH=${HOME}/scratch/workdir/hoomd/hoomd.py312/bin:$PATH \
 cmake \
--B ${HOME}/scratch/workdir/hoomd/build/hoomd-intelmpi-tbb-final \
--S ${HOME}/scratch/workdir/hoomd/hoomd-blue \
+-B ${HOME}/scratch/workdir/hoomd/build/hoomd-intelmpi \
+-S ${HOME}/scratch/workdir/hoomd/hoomd-blue-HPC \
 -D ENABLE_MPI=on \
 -D ENABLE_TBB=off \
 -D ENABLE_LLVM=off \
@@ -62,9 +62,9 @@ cmake \
 -D Eigen3_DIR=${HOME}/scratch/workdir/hoomd/hoomd.py312/share/eigen3/cmake \
 -D pybind11_DIR=${HOME}/scratch/workdir/hoomd/hoomd.py312/lib/python3.12/site-packages/pybind11/share/cmake/pybind11
 
-time cmake --build ${HOME}/scratch/workdir/hoomd/build/hoomd-intelmpi-tbb-final -j 8
+time cmake --build ${HOME}/scratch/workdir/hoomd/build/hoomd-intelmpi -j 8
 
-PYTHONPATH=${HOME}/scratch/workdir/hoomd/build/hoomd-intelmpi-tbb-final \
+PYTHONPATH=${HOME}/scratch/workdir/hoomd/build/hoomd-intelmpi \
 ${HOME}/scratch/workdir/hoomd/hoomd.py312/bin/python \
 -m hoomd
 # python: No module named hoomd.__main__; 'hoomd' is a package and cannot be directly executed
@@ -112,7 +112,7 @@ cmd="time mpirun \
 -hosts ${hosts} \
 -wdir ${HOME}/scratch/workdir/hoomd \
 -ppn 48 \
--genv PYTHONPATH ${HOME}/scratch/workdir/hoomd/build/hoomd-intelmpi-tbb-final:${HOME}/scratch/workdir/hoomd/hoomd-benchmarks \
+-genv PYTHONPATH ${HOME}/scratch/workdir/hoomd/build/hoomd-intelmpi:${HOME}/scratch/workdir/hoomd/hoomd-benchmarks \
 ${HOME}/scratch/workdir/hoomd/hoomd.py312/bin/python \
 -m hoomd_benchmarks.md_pair_wca \
 --device CPU -v \
