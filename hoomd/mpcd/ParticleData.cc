@@ -975,6 +975,7 @@ void mpcd::ParticleData::removeParticles(GPUVector<mpcd::detail::pdata_element>&
                                                access_location::host,
                                                access_mode::readwrite);
 
+        #pragma omp simd
         for (unsigned int idx = 0; idx < n_remove; ++idx)
             {
             // pack the current particle

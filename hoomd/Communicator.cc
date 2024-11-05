@@ -160,24 +160,31 @@ void Communicator::GroupCommunicator<group_data>::migrateGroups(bool incomplete,
                             else if (flags & send_down)
                                 iz = -1;
 
-                            int ni = my_pos.x;
-                            int nj = my_pos.y;
-                            int nk = my_pos.z;
+                            // int ni = my_pos.x;
+                            // int nj = my_pos.y;
+                            // int nk = my_pos.z;
+                            unsigned int ni = my_pos.x;
+                            unsigned int nj = my_pos.y;
+                            unsigned int nk = my_pos.z;
+
 
                             ni += ix;
-                            if (ni == (int)di.getW())
+                            // if (ni == (int)di.getW())
+                            if (ni == di.getW())                            
                                 ni = 0;
                             else if (ni < 0)
                                 ni += di.getW();
 
                             nj += iy;
-                            if (nj == (int)di.getH())
+                            // if (nj == (int)di.getH())
+                            if (nj == di.getH())
                                 nj = 0;
                             else if (nj < 0)
                                 nj += di.getH();
 
                             nk += iz;
-                            if (nk == (int)di.getD())
+                            // if (nk == (int)di.getD())
+                            if (nk == di.getD())
                                 nk = 0;
                             else if (nk < 0)
                                 nk += di.getD();

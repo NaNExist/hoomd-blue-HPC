@@ -133,6 +133,7 @@ void ComputeThermo::computeProperties()
     else
         {
         // total kinetic energy
+        #pragma omp simd
         for (unsigned int group_idx = 0; group_idx < group_size; group_idx++)
             {
             unsigned int j = m_group->getMemberIndex(group_idx);
@@ -165,6 +166,7 @@ void ComputeThermo::computeProperties()
                                        access_location::host,
                                        access_mode::read);
 
+        #pragma omp simd
         for (unsigned int group_idx = 0; group_idx < group_size; group_idx++)
             {
             unsigned int j = m_group->getMemberIndex(group_idx);
@@ -198,6 +200,8 @@ void ComputeThermo::computeProperties()
 
     // total potential energy
     double pe_total = 0.0;
+
+    #pragma omp simd reduction(+:pe_total)
     for (unsigned int group_idx = 0; group_idx < group_size; group_idx++)
         {
         unsigned int j = m_group->getMemberIndex(group_idx);
@@ -223,6 +227,7 @@ void ComputeThermo::computeProperties()
         {
         // Calculate upper triangular virial tensor
         size_t virial_pitch = net_virial.getPitch();
+        #pragma omp simd reduction(+:virial_xx, virial_xy, virial_xz, virial_yy, virial_yz, virial_zz)
         for (unsigned int group_idx = 0; group_idx < group_size; group_idx++)
             {
             unsigned int j = m_group->getMemberIndex(group_idx);

@@ -121,7 +121,8 @@ void NeighborListBinned::buildNlist(uint64_t timestep)
         unsigned int my_cell = ci(ib, jb, kb);
 
         // loop through all neighboring bins
-        for (unsigned int cur_adj = 0; cur_adj < cadji.getW(); cur_adj++)
+        unsigned int num_adj = cadji.getW();
+        for (unsigned int cur_adj = 0; cur_adj < num_adj; cur_adj++)
             {
             unsigned int neigh_cell = h_cell_adj.data[cadji(cur_adj, my_cell)];
 

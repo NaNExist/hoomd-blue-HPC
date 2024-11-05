@@ -455,6 +455,7 @@ void NeighborList::updateRList()
     ArrayHandle<Scalar> h_r_cut(m_r_cut, access_location::host, access_mode::overwrite);
     ArrayHandle<Scalar> h_rcut_base(m_rcut_base, access_location::host, access_mode::overwrite);
 
+    #pragma omp simd
     for (unsigned int i = 0; i < m_r_cut.getNumElements(); i++)
         {
         h_r_cut.data[i] = h_rcut_base.data[i];
@@ -491,11 +492,16 @@ void NeighborList::updateRList()
     ArrayHandle<Scalar> h_rcut_max(m_rcut_max, access_location::host, access_mode::readwrite);
 
     Scalar r_cut_max = 0.0f;
-    for (unsigned int i = 0; i < m_pdata->getNTypes(); ++i)
+    unsigned int NTypes = m_pdata->getNTypes();
+
+    #pragma omp simd reduction(max:r_cut_max)
+    for (unsigned int i = 0; i < NTypes; ++i)
         {
         // get the maximum cutoff for this type
         Scalar r_cut_max_i = 0.0f;
-        for (unsigned int j = 0; j < m_pdata->getNTypes(); ++j)
+
+        #pragma omp simd reduction(max:r_cut_max_i)
+        for (unsigned int j = 0; j < NTypes; ++j)
             {
             const Scalar r_cut_ij = h_r_cut.data[m_typpair_idx(i, j)];
             if (r_cut_ij > r_cut_max_i)
@@ -515,6 +521,7 @@ void NeighborList::updateRList()
     // this extra loop guards against some weird case where all of the cutoffs are turned off
     // and we accidentally get infinity
     Scalar r_cut_min = m_rcut_max_max;
+    #pragma omp simd reduction(min:r_cut_min)
     for (unsigned int cur_pair = 0; cur_pair < m_typpair_idx.getNumElements(); ++cur_pair)
         {
         const Scalar r_cut_ij = h_r_cut.data[cur_pair];
