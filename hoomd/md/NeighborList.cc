@@ -1252,8 +1252,11 @@ bool NeighborList::distanceCheck(uint64_t timestep)
         Scalar rmax = old_rmin + m_r_buff;
 
         // max displacement for each particle (after subtraction of homogeneous dilations)
-        const Scalar delta_max = (rmax * lambda_min - old_rmin) / Scalar(2.0);
-        Scalar maxsq = (delta_max > 0) ? delta_max * delta_max : 0;
+        // const Scalar delta_max = (rmax * lambda_min - old_rmin) / Scalar(2.0);
+        // Scalar maxsq = (delta_max > 0) ? delta_max * delta_max : 0;
+        const Scalar delta_max = (rmax * lambda_min - old_rmin);
+        Scalar maxsq = (delta_max > 0) ? delta_max * delta_max / Scalar(4.0) : 0;
+
 
         Scalar3 dx = make_scalar3(h_pos.data[i].x - lambda.x * h_last_pos.data[i].x,
                                   h_pos.data[i].y - lambda.y * h_last_pos.data[i].y,

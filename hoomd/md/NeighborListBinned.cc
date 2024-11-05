@@ -105,16 +105,16 @@ void NeighborListBinned::buildNlist(uint64_t timestep)
 
         // find the bin each particle belongs in
         Scalar3 f = box.makeFraction(my_pos, ghost_width);
-        int ib = (unsigned int)(f.x * dim.x);
-        int jb = (unsigned int)(f.y * dim.y);
-        int kb = (unsigned int)(f.z * dim.z);
+        unsigned int ib = (unsigned int)(f.x * dim.x);
+        unsigned int jb = (unsigned int)(f.y * dim.y);
+        unsigned int kb = (unsigned int)(f.z * dim.z);
 
         // need to handle the case where the particle is exactly at the box hi
-        if (ib == (int)dim.x && periodic.x)
+        if (ib == dim.x && periodic.x)
             ib = 0;
-        if (jb == (int)dim.y && periodic.y)
+        if (jb == dim.y && periodic.y)
             jb = 0;
-        if (kb == (int)dim.z && periodic.z)
+        if (kb == dim.z && periodic.z)
             kb = 0;
 
         // identify the bin
