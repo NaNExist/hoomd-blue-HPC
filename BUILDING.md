@@ -36,7 +36,7 @@ The following commands
 
 1. Check available MPI libraries, IntelMKL libraries and IntelTBB libraries that pre-built by the Supercomputer administrator
 2. Load IntelMPI environment variables
-3. Configure the scripts for building HOOMD-blue with OpenMPI and pip-installed `pybind11`
+3. Configure the scripts for building HOOMD-blue with IntelMPI and pip-installed `pybind11`
 4. Build the Python package
 5. Validate the built Python package
    
